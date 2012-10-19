@@ -4,8 +4,8 @@
 //http://www.instructables.com/id/Arduino-Timer-Interrupts/
 
 
-byte high = 239;
-byte low = 255;
+byte high = 67;
+byte low = 248;
 byte currentVal = 0;
 
 const int startHighMax = 32;
@@ -18,7 +18,7 @@ boolean isSignal = false;
 int signalRepeat = 3;
 int currentSignalLength = 0;
 int currentSignal = 0;
-const int maxUserIdLength = 32;
+const int maxUserIdLength = 16;
 int userId[maxUserIdLength];
 int currentUserIdPos = 0;
 
@@ -40,7 +40,8 @@ void setup(){
   ADMUX |= (1 << REFS0); //set reference voltage
   ADMUX |= (1 << ADLAR); //left align the ADC value- so we can read highest 8 bits from ADCH register only
   
-  ADCSRA |= (1 << ADPS2) | (1 << ADPS0); //set ADC clock with 32 prescaler- 16mHz/32=500kHz
+  ADCSRA |= (1 << ADPS1) |(1 << ADPS2) | (1 << ADPS0); //set ADC clock with 64 prescaler- 16mHz/32=500kHz
+//  ADCSRA |= (1 << ADPS1) | (1 << ADPS0); //set ADC clock with 32 prescaler- 16mHz/32=500kHz
   ADCSRA |= (1 << ADATE); //enabble auto trigger
   ADCSRA |= (1 << ADIE); //enable interrupts when measurement complete
   ADCSRA |= (1 << ADEN); //enable ADC
@@ -92,7 +93,7 @@ ISR(ADC_vect) {//when new ADC value ready
 
 void loop(){
 //  Serial.println("Analog 0: " + analogRead(A0));
-
+//    Serial.println(startHighCount);
   for (int i = 0; i < maxUserIdLength; i++) {
     Serial.print(userId[i]);
   }

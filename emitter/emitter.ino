@@ -29,7 +29,7 @@ void setup(){
   ADMUX |= (1 << REFS0); //set reference voltage
   ADMUX |= (1 << ADLAR); //left align the ADC value- so we can read highest 8 bits from ADCH register only
   
-  ADCSRA |= (1 << ADPS1) | (1 << ADPS2) | (1 << ADPS0); //set ADC clock with 32 prescaler- 16mHz/32=500kHz
+  ADCSRA |= (1 << ADPS1) | (1 << ADPS2) | (1 << ADPS0); //set ADC clock with 64 prescaler- 16mHz/32=500kHz
   Serial.println( 1 << ADPS2);
   Serial.println(ADPS0);
   ADCSRA |= (1 << ADATE); //enabble auto trigger
@@ -42,14 +42,13 @@ void setup(){
   analogWrite(A0, 0);
 }
 
-
 ISR(ADC_vect) {//when new ADC value ready
   
   // If the max detector count for highs isn't hit yet
   // and we haven't started writing out the id
   if ((writing_id == original_id) && (startHighCount < startHighMax)) {
     // Send out a high
-    analogWrite(A0, 0);
+    analogWrite(A0, 255);
     startHighCount++;
   }
     // If the max detector count fow lows isn't hit yet
@@ -98,8 +97,11 @@ ISR(ADC_vect) {//when new ADC value ready
 
 
 void loop(){
-
- 
+//  analogWrite(A0, 255);
+//
+//  delay(1000);
+//  analogWrite(A0, 0);
+//  delay(1000); 
 }
 
 
